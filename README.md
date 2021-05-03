@@ -11,16 +11,20 @@
 ## 🛠️ Development & Testing
 
 ```shell
-# Install PHP dependencies
+# Install PHP dependencies and create .env file
 composer install
 
 # Install JavaScript dependencies
 yarn install
 
-# Build frontend for development
-yarn run build
+# Build frontend assets for development
+yarn run dev
+```
 
-# Setup application config and database
+This command configured the application and the database. **Important:** don't forget to configure the `.env` file
+before running this command.
+
+```shell
 php artisan audiocasts:init
 ```
 
@@ -31,7 +35,7 @@ the application.
 php artisan serve
 ```
 
-To compile the frontend for development whenever a change happens, run this command.
+To compile the frontend assets for development whenever a change happens, run this command.
 
 ```shell
 yarn run watch
