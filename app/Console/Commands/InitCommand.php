@@ -10,8 +10,6 @@ use Throwable;
 
 class InitCommand extends Command
 {
-    // TODO: Test this and figure out what to do next
-
     private const NON_INTERACTION_MAX_ATTEMPT_COUNT = 10;
 
     protected $signature = 'audiocasts:init';
@@ -43,9 +41,9 @@ class InitCommand extends Command
         }
 
         try {
-            $this->maybeGenerateAppKey();
             $this->maybeSetUpDatabase();
             $this->migrateDatabase();
+            $this->maybeGenerateAppKey();
         } catch (Throwable $error) {
             $this->error("Audiocasts installation didn't finish successfully. Sorry for this!");
             return;
