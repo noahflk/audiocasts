@@ -10,6 +10,8 @@ use Throwable;
 
 class InitCommand extends Command
 {
+    // TODO: Test this and figure out what to do next
+
     private const NON_INTERACTION_MAX_ATTEMPT_COUNT = 10;
 
     protected $signature = 'audiocasts:init';
@@ -46,6 +48,7 @@ class InitCommand extends Command
             $this->migrateDatabase();
         } catch (Throwable $error) {
             $this->error("Audiocasts installation didn't finish successfully. Sorry for this!");
+            return;
         }
 
         $this->comment(PHP_EOL . 'Success! Audiocasts is now ready ✅');
@@ -57,7 +60,7 @@ class InitCommand extends Command
             $this->info('Generating app key');
             $this->artisan->call('key:generate');
         } else {
-            $this->comment('App key exists -- skipping');
+            $this->comment('App key exists, will be skipped');
         }
     }
 
@@ -85,6 +88,7 @@ class InitCommand extends Command
             } catch (Throwable $error) {
                 $this->error($error->getMessage());
 
+
                 // We only try to update credentials if running in interactive mode.
                 // Otherwise, we require admin intervention to fix them.
                 // This avoids inadvertently wiping credentials if there's a connection failure.
@@ -95,9 +99,10 @@ class InitCommand extends Command
                         $attemptCount,
                         self::NON_INTERACTION_MAX_ATTEMPT_COUNT
                     );
+
                     $this->warn($warning);
                 } else {
-                    $this->warn(sprintf("%Unable to connect to the database. Let's set it up.", PHP_EOL));
+                    $this->warn('Unable to connect to the database. Starting setup.');
                     $this->setDatabaseConfig();
                 }
             }
@@ -127,7 +132,7 @@ class InitCommand extends Command
         );
 
         if ($config['DB_CONNECTION'] === 'sqlite') {
-            $path = $this->ask("Absolute path to the DB file (will be created if it doesn't exist");
+            $path = $this->ask("Path to the DB file (will be created if it doesn't exist");
             $this->maybeGenerateDatabaseFile($path);
 
             $config['DB_DATABASE'] = $path;
