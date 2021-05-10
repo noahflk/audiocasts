@@ -9,7 +9,7 @@ use App\Repositories\FileRepository;
 use SplFileInfo;
 use getID3;
 
-class AudiobookSynchronizerService
+class AudiobookSyncService
 {
     public const SYNC_RESULT_SUCCESS = 1;
     public const SYNC_RESULT_BAD_FILE = 2;
@@ -21,7 +21,7 @@ class AudiobookSynchronizerService
 
 
     private $audiobook;
-    private $files;
+    private $files = [];
 
 
     public function __construct(
@@ -37,17 +37,16 @@ class AudiobookSynchronizerService
 
     public function sync($audiobook): int
     {
-        $this->audiobook = $audiobook;
-
         // store OR update audiobook metadata
         // TODO: could be done better since currently we do not check if changed occurred and metadata is based on single file
-        $hash = $this->utilService->getPathHash($audiobook->directory);
-        Audiobook::updateOrCreate(["id" => $hash], $audiobook);
+        $hash = $this->utilService->getPathHash($audiobook['directory']);
+        $this->audiobook = Audiobook::updateOrCreate(['id' => $hash], $audiobook);
 
         // get all audiobook files
-        $this->files = $this->utilService->getAudioFilesInDirectory($this->audiobook->path);
+        $filePaths = $this->utilService->getAudioFilesInDirectory($this->audiobook['directory']);
 
-        foreach ($this->files as $file) {
+
+        foreach ($filePaths as $file) {
             $this->syncFile($file);
         }
     }
@@ -66,44 +65,51 @@ class AudiobookSynchronizerService
             return self::SYNC_RESULT_BAD_FILE;
         }
 
+
         $hash = $this->utilService->getPathHash($file);
-        File::updateOrCreate(["id" => $hash], $metadata);
+        File::updateOrCreate(['id' => $hash], $metadata);
 
         return self::SYNC_RESULT_SUCCESS;
     }
 
-    private function getFileMetadata($file): object
+    private function getFileMetadata($file): array
     {
         $metadata = $this->getID3->analyze($file);
         $this->getID3->CopyTagsToComments($metadata);
 
         $info = new SplFileInfo($file);
 
+        // TODO: Handle failure with getID3
+
         $data = [
-            "path" => $file,
-            "name" => null,
-            "cover" => null,
-            "audiobook_id" => $this->audiobook->id,
-            "type" => $metadata["mime_type"],
-            "filesize" => $metadata["filesize"],
-            "playtime" => $metadata["playtime_seconds"],
-            "bitrate" => round($metadata["audio"]["bitrate"]),
-            "mtime" => $info->getMTime(),
+            'path' => $file,
+            'name' => null,
+            'cover' => null,
+            'audiobook_id' => $this->audiobook->id,
+            'type' => $metadata['mime_type'],
+            'filesize' => $metadata['filesize'],
+            'playtime' => $metadata['playtime_seconds'],
+            'bitrate' => round($metadata['audio']['bitrate']),
+            'mtime' => $info->getMTime(),
             // Manually add timestamps since bulk inserts don't add them automatically
-            "created_at" => date('Y-m-d H:i:s'),
-            "updated_at" => date('Y-m-d H:i:s')
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s')
         ];
 
-        if (isset($metadata["comments"]["title"][0])) {
-            $data["name"] = $metadata["comments"]["title"][0];
+        if (isset($metadata['comments']['title'][0])) {
+            $data['name'] = $metadata['comments']['title'][0];
         } else {
-            $data["name"] = $metadata["filename"];
+            $data['name'] = $metadata['filename'];
         }
 
-        if (isset($metadata["comments"]["picture"][0]["data"])) {
-            $data["cover"] = $this->getDeduplicatedCoverPath($metadata["comments"]["picture"][0]["data"]);
+        if (isset($metadata['comments']['picture'][0]['data'])) {
+            $data['cover'] = $this->getDeduplicatedCoverPath($metadata['comments']['picture'][0]['data']);
         }
 
+        // TODO: Why does the string ID become a 5 digit int?
+        dd($data, $this->audiobook, $this->audiobook['new']);
+
+        $this->files[] = $data;
         return $data;
     }
 

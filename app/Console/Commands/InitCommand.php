@@ -13,7 +13,7 @@ class InitCommand extends Command
     private const NON_INTERACTION_MAX_ATTEMPT_COUNT = 10;
 
     protected $signature = 'audiocasts:init';
-    protected $description = 'Initialize Audiocasts';
+    protected $description = 'Initializes Audiocasts.';
 
     private $artisan;
     private $db;
@@ -130,7 +130,7 @@ class InitCommand extends Command
         );
 
         if ($config['DB_CONNECTION'] === 'sqlite') {
-            $path = $this->ask("Path to the DB file (will be created if it doesn't exist");
+            $path = $this->ask("Absolute path to the DB file (will be created if it doesn't exist");
             $this->maybeGenerateDatabaseFile($path);
 
             $config['DB_DATABASE'] = $path;

@@ -8,19 +8,19 @@ use App\Console\Commands\ScanCommand;
 class SyncService
 {
     private $audiobookAggregatorService;
-    private $audiobookSynchronizerService;
+    private $audiobookSyncService;
     private $coverImageSerivce;
     private $utilService;
 
     public function __construct(
         AudiobookAggregatorService $audiobookAggregatorService,
-        AudiobookSynchronizerService $audiobookSynchronizerService,
+        AudiobookSyncService $audiobookSyncService,
         CoverImageService $coverImageSerivce,
         UtilService $utilService,
     )
     {
         $this->audiobookAggregatorService = $audiobookAggregatorService;
-        $this->audiobookSynchronizerService = $audiobookSynchronizerService;
+        $this->audiobookSyncService = $audiobookSyncService;
         $this->coverImageSerivce = $coverImageSerivce;
         $this->utilService = $utilService;
     }
@@ -36,22 +36,20 @@ class SyncService
         // Get all audiobook directories, no matter if they exist or not
         $audiobooks = $this->audiobookAggregatorService->get();
 
-        // Save audiobooks
-
         if ($scanCommand) {
             $scanCommand->createProgressBar(count($audiobooks));
         }
 
         // now go through each audiobook
         foreach ($audiobooks as $audiobook) {
-            $result = $this->audiobookSynchronizerService->sync($audiobook);
+            $result = $this->audiobookSyncService->sync($audiobook);
 
             switch ($result) {
-                case AudiobookSynchronizerService::SYNC_RESULT_SUCCESS:
+                case AudiobookSyncService::SYNC_RESULT_SUCCESS:
                     $results['success'][] = $audiobook->directory;
                     break;
 
-                case AudiobookSynchronizerService::SYNC_RESULT_UNMODIFIED:
+                case AudiobookSyncService::SYNC_RESULT_UNMODIFIED:
                     $results['unmodified'][] = $audiobook->directory;
                     break;
 
@@ -62,7 +60,7 @@ class SyncService
 
             if ($scanCommand) {
                 $scanCommand->advanceProgressBar();
-                // TODO: also send error that happened in audiobookSynchronizerService back
+                // TODO: also send error that happened in audiobookSyncService back
                 $scanCommand->logSyncStatusToConsole($audiobook->directory, $result);
             }
         }

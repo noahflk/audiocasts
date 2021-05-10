@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use App\Facades\Pathlib;
+use App\Models\CoverImage;
+use App\Models\Media;
 use Illuminate\Support\Str;
 use getID3;
 
@@ -68,6 +70,7 @@ class AudiobookAggregatorService
                 'updated_at' => date('Y-m-d H:i:s'),
             ];
 
+
             if (isset($metadata['comments']['picture'][0]['data'])) {
                 $data['cover'] = CoverImage::save($metadata['comments']['picture'][0]['data']);
             }
@@ -76,7 +79,7 @@ class AudiobookAggregatorService
                 $album = $metadata['comments']['album'][0];
 
             } else {
-                $exploded = explode("/", $directory);
+                $exploded = explode('/', $directory);
                 $album = end($exploded);
 
             }

@@ -9,14 +9,19 @@ class Audiobook extends Model
 {
     use HasFactory;
 
+    public $incrementing = false;
+
+    protected $guarded = [];
+    protected $keyType = 'string';
+
     public function coverPath(): string
     {
-        return "storage/covers/" . $this->cover;
+        return 'storage/covers/' . $this->cover;
     }
 
     public function files()
     {
-        return $this->hasMany("App\Models\File");
+        return $this->hasMany('App\Models\File');
     }
 
     // Also removes files that belong to audiobook because of constraint in files_table migration

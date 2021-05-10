@@ -9,6 +9,11 @@ class File extends Model
 {
     use HasFactory;
 
+    public $incrementing = false;
+
+    protected $guarded = [];
+    protected $keyType = 'string';
+
     public static function getAllCovers(): array
     {
         return static::whereNotNull('cover')->pluck('cover')->toArray();

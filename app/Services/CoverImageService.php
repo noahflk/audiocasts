@@ -35,7 +35,7 @@ class CoverImageService
 
         // Fetch all covers on disk
         $this->coversFromDisk = Storage::files(config('audiocasts.cover_directory'));
-
+        dd("Hiii");
         $deletedCovers = $this->deleteUnusedCovers();
         $regeneratedCovers = $this->createMissingCovers();
 

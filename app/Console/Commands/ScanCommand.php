@@ -2,32 +2,21 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Setting;
 use App\Services\FileSynchronizer;
 use App\Services\SyncService;
 use Illuminate\Console\Command;
+use Symfony\Component\Console\Helper\ProgressBar;
 
 class ScanCommand extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
     protected $signature = 'audiocasts:scan';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Command description';
+    protected $description = 'Scans media directories for audiobooks.';
 
     private $synced = 0;
     private $ignored = 0;
     private $invalid = 0;
     private $syncService;
-
+    private $progressBar;
 
     /**
      * Create a new command instance.
@@ -48,7 +37,7 @@ class ScanCommand extends Command
      */
     public function handle()
     {
-        $this->info('Starting media scan'. PHP_EOL);
+        $this->info('Starting media scan' . PHP_EOL);
 
         $this->syncService->scan($this);
 
@@ -75,5 +64,15 @@ class ScanCommand extends Command
         } else {
             ++$this->synced;
         }
+    }
+
+    public function createProgressBar(int $max): void
+    {
+        $this->progressBar = $this->getOutput()->createProgressBar($max);
+    }
+
+    public function advanceProgressBar(): void
+    {
+        $this->progressBar->advance();
     }
 }

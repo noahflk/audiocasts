@@ -8,20 +8,20 @@ use Illuminate\Support\Str;
 
 class UtilService
 {
-    const VALID_FILE_TYPES = [".mp3", ".MP3"];
-    const COVER_DIRECTORY = "public/covers/";
+    const VALID_FILE_TYPES = ['.mp3', '.MP3'];
+    const COVER_DIRECTORY = 'public/covers/';
 
-    public function coversAreIdentical($cover, $coverPath)
+    public function coversAreIdentical($cover, $coverFilename)
     {
-        $encodedAudiobookCover = base64_encode(Storage::get(self::COVER_DIRECTORY . $cover));
+        $encodedAudiobookCover = base64_encode(Storage::get(self::COVER_DIRECTORY . $coverFilename));
 
-        return $encodedAudiobookCover == base64_encode($coverPath);
+        return $encodedAudiobookCover == $cover;
     }
 
 
     public function getAudioFilesInDirectory($directory): array
     {
-        $files = Pathlib::filesWithPath($directory);
+        $files = Pathlib::files($directory);
 
         return array_values(array_filter($files, function ($file) {
             return Str::endsWith($file, self::VALID_FILE_TYPES);
