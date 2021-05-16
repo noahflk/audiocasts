@@ -12,8 +12,8 @@ class FeedPropertiesController extends Controller
     public function uploadCover(Request $request)
     {
         $setting = new Setting();
-        $setting->key = "FEED_COVER";
-        $setting->value = $request->file('cover')->store('covers/');
+        $setting->key = 'FEED_COVER';
+        $setting->value = $request->file('cover')->store(config('audiocasts.cover_directory'));
         $setting->save();
     }
 
@@ -26,7 +26,7 @@ class FeedPropertiesController extends Controller
             'language' => ['required', 'string'],
         ]);
 
-        if($validator->fails()) {
+        if ($validator->fails()) {
             return response([
                 "errors" => $validator->messages()
             ], 400);
@@ -36,7 +36,7 @@ class FeedPropertiesController extends Controller
         $title->value = $request->title;
         $title->save();
 
-        if(Setting::where(['key' => "FEED_DESCRIPTION"])->first()) {
+        if (Setting::where(['key' => "FEED_DESCRIPTION"])->first()) {
             $description = Setting::firstOrNew(['key' => "FEED_DESCRIPTION"]);
             $description->value = $request->description;
             $description->save();

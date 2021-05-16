@@ -14,12 +14,12 @@ class CreateAudiobooksTable extends Migration
     public function up()
     {
         Schema::create('audiobooks', function (Blueprint $table) {
-            $table->string("id", 32)->primary();
-            $table->string("title");
-            $table->string("slug");
-            $table->string("author");
-            $table->string("directory");
-            $table->string("cover");
+            $table->string('id', 32)->primary();
+            $table->string('title');
+            $table->string('slug');
+            $table->string('author');
+            $table->string('directory');
+            $table->string('cover')->nullable();
             $table->timestamps();
         });
     }

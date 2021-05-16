@@ -46,24 +46,26 @@ class SyncService
 
             switch ($result) {
                 case AudiobookSyncService::SYNC_RESULT_SUCCESS:
-                    $results['success'][] = $audiobook->directory;
+                    $results['success'][] = $audiobook['directory'];
                     break;
 
                 case AudiobookSyncService::SYNC_RESULT_UNMODIFIED:
-                    $results['unmodified'][] = $audiobook->directory;
+                    $results['unmodified'][] = $audiobook['directory'];
                     break;
 
                 default:
-                    $results['bad_files'][] = $audiobook->directory;
+                    $results['bad_files'][] = $audiobook['directory'];
                     break;
             }
 
             if ($scanCommand) {
                 $scanCommand->advanceProgressBar();
                 // TODO: also send error that happened in audiobookSyncService back
-                $scanCommand->logSyncStatusToConsole($audiobook->directory, $result);
+                $scanCommand->logSyncStatusToConsole($audiobook['directory'], $result);
             }
         }
+
+        // TODO: Next: place empty cover image somewhere and use  this
 
         // Delete audiobooks that no longer exist
         $hashes = array_map(function (string $path): string {

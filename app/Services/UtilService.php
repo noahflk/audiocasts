@@ -9,13 +9,25 @@ use Illuminate\Support\Str;
 class UtilService
 {
     const VALID_FILE_TYPES = ['.mp3', '.MP3'];
-    const COVER_DIRECTORY = 'public/covers/';
 
-    public function coversAreIdentical($cover, $coverFilename)
+    /**
+     * Checks if a Base64 encoded image is equal to a image stored on disk
+     *
+     * @param ?string $cover Base64 encoded data of the cover image
+     * @param ?string $coverPath Path to a cover already stored on disk
+     * @return bool
+     */
+    public function coversAreIdentical(?string $cover, ?string $coverPath): bool
     {
-        $encodedAudiobookCover = base64_encode(Storage::get(self::COVER_DIRECTORY . $coverFilename));
+        // If either the cover or the path to the cover are not provided, they cannot be identical
+        if (!$cover || !$coverPath) {
+            return false;
+        }
 
-        return $encodedAudiobookCover == $cover;
+        // TODO: Handle file not found
+        $coverFromPath = Storage::disk('public')->get(config('audiocasts.cover_directory') . $coverPath);
+
+        return base64_encode($cover) == base64_encode($coverFromPath);
     }
 
 
@@ -38,7 +50,7 @@ class UtilService
     public function isCoverFile(string $filename): bool
     {
         $coverFiletype = config('audiocasts.cover_file_type');
-        $filenameWithoutExtension = substr($filename, 0, count($coverFiletype));
-        return Str::isUuid() && str_ends_with($filename, $filenameWithoutExtension);
+        $filenameWithoutExtension = substr($filename, 0, strlen($coverFiletype));
+        return Str::isUuid($filenameWithoutExtension) && str_ends_with($filename, $filenameWithoutExtension);
     }
 }

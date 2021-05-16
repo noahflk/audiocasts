@@ -16,7 +16,11 @@ class Audiobook extends Model
 
     public function coverPath(): string
     {
-        return 'storage/covers/' . $this->cover;
+        if ($this->cover) {
+            return config('audiocasts.cover_directory_private') . $this->cover;
+        }
+
+        return 'images/cover-empty.jpg';
     }
 
     public function files()

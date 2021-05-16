@@ -2,9 +2,9 @@
 
 namespace App\Console\Commands;
 
-use App\Services\FileSynchronizer;
 use App\Services\SyncService;
 use Illuminate\Console\Command;
+use App\Services\AudiobookSyncService;
 use Symfony\Component\Console\Helper\ProgressBar;
 
 class ScanCommand extends Command
@@ -53,9 +53,9 @@ class ScanCommand extends Command
     {
         $name = basename($path);
 
-        if ($result === FileSynchronizer::SYNC_RESULT_UNMODIFIED) {
+        if ($result === AudiobookSyncService::SYNC_RESULT_UNMODIFIED) {
             ++$this->ignored;
-        } elseif ($result === FileSynchronizer::SYNC_RESULT_BAD_FILE) {
+        } elseif ($result === AudiobookSyncService::SYNC_RESULT_BAD_FILE) {
             if ($this->option('verbose')) {
                 $this->error(PHP_EOL . "'$name' is not a valid media file: " . $reason);
             }

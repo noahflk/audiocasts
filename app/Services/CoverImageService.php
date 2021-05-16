@@ -34,8 +34,7 @@ class CoverImageService
         );
 
         // Fetch all covers on disk
-        $this->coversFromDisk = Storage::files(config('audiocasts.cover_directory'));
-        dd("Hiii");
+        $this->coversFromDisk = Storage::disk('public')->files(config('audiocasts.cover_directory'));
         $deletedCovers = $this->deleteUnusedCovers();
         $regeneratedCovers = $this->createMissingCovers();
 
@@ -57,7 +56,7 @@ class CoverImageService
             $foundInDatabase = in_array($coverName, $this->coversFromDatabase);
 
             if (!$foundInDatabase && $this->utilSerivce->isCoverFile($coverPath)) {
-                Storage::delete($coverPath);
+                Storage::disk('public')->delete($coverPath);
                 array_push($deletedCovers, $coverPath);
             }
         }

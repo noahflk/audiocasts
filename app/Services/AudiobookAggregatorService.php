@@ -62,7 +62,6 @@ class AudiobookAggregatorService
             $this->getID3->CopyTagsToComments($metadata);
 
             $data = [
-                'cover' => 'empty.png',
                 'author' => 'Unknown author',
                 'directory' => $directory,
                 // Manually add timestamps since bulk inserts don't add them automatically

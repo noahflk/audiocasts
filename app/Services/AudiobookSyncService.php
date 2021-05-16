@@ -45,10 +45,18 @@ class AudiobookSyncService
         // get all audiobook files
         $filePaths = $this->utilService->getAudioFilesInDirectory($this->audiobook['directory']);
 
+        // TODO: This result should not be dependent on a single file
+        $audiobookResult = self::SYNC_RESULT_UNMODIFIED;
 
         foreach ($filePaths as $file) {
-            $this->syncFile($file);
+            $result = $this->syncFile($file);
+
+            if ($result === self::SYNC_RESULT_BAD_FILE || $result === self::SYNC_RESULT_SUCCESS) {
+                $audiobookResult = $result;
+            }
         }
+
+        return $audiobookResult;
     }
 
     private function syncFile($file): int
@@ -106,14 +114,19 @@ class AudiobookSyncService
             $data['cover'] = $this->getDeduplicatedCoverPath($metadata['comments']['picture'][0]['data']);
         }
 
-        // TODO: Why does the string ID become a 5 digit int?
-        dd($data, $this->audiobook, $this->audiobook['new']);
-
         $this->files[] = $data;
         return $data;
     }
 
-    private function getDeduplicatedCoverPath($cover): ?string
+    /**
+     * When the cover of a file is the same as the audiobook cover, there is no need to store it again
+     * The same applies when another file of the same audiobook already has the same cover
+     * Instead, the property in the DB is left blank which implies the cover from the audiobook should be used
+     *
+     * @param string $cover
+     * @return string|null
+     */
+    private function getDeduplicatedCoverPath(string $cover): ?string
     {
         // If cover is same as audiobook cover, no action is necessary
         if ($this->utilService->coversAreIdentical($cover, $this->audiobook->cover)) {
@@ -122,8 +135,8 @@ class AudiobookSyncService
 
         // Check if cover is identical to other file of same audiobook
         foreach ($this->files as $file) {
-            if ($this->utilService->coversAreIdentical($file->cover, $cover)) {
-                return $file->cover;
+            if ($file['cover'] && $this->utilService->coversAreIdentical($cover, $file['cover'])) {
+                return $file['cover'];
             }
         }
 
