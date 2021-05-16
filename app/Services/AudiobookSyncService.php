@@ -45,9 +45,9 @@ class AudiobookSyncService
         // get all audiobook files
         $filePaths = $this->utilService->getAudioFilesInDirectory($this->audiobook['directory']);
 
-        // TODO: This result should not be dependent on a single file
         $audiobookResult = self::SYNC_RESULT_UNMODIFIED;
 
+        // TODO: This result should not be dependent on a single file
         foreach ($filePaths as $file) {
             $result = $this->syncFile($file);
 
@@ -151,7 +151,7 @@ class AudiobookSyncService
 
     private function isFileNew($filePath): bool
     {
-        return !$this->fileRepository->getOneById($this->utilService->getPathHash($filePath));
+        return !File::where('id', $this->utilService->getPathHash($filePath))->exists();
     }
 
     private function isFileChanged($filePath): bool
@@ -159,6 +159,14 @@ class AudiobookSyncService
         $info = new SplFileInfo($filePath);
         $fileModifiedTime = $info->getMTime();
         $file = $this->fileRepository->getOneById($this->utilService->getPathHash($filePath));
-        return !$this->isFileNew($filePath) && $file->mtime !== $fileModifiedTime;
+
+        // If file is not found, we assume it has changed since we cannot know if that's not the case
+        // But currently that's an edge-case which shouldn't occur
+        if (!$file) {
+            return true;
+        }
+
+        // The PHP PDO casts integers from the DB to strings, so we need to ensure both values are of the same datatype
+        return !$this->isFileNew($filePath) && $file->mtime !== strval($fileModifiedTime);
     }
 }

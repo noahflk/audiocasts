@@ -65,8 +65,6 @@ class SyncService
             }
         }
 
-        // TODO: Next: place empty cover image somewhere and use  this
-
         // Delete audiobooks that no longer exist
         $hashes = array_map(function (string $path): string {
             return $this->utilService->getPathHash($path);
