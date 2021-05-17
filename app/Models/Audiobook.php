@@ -59,4 +59,9 @@ class Audiobook extends Model
     {
         return static::whereNotNull('cover')->pluck('cover')->toArray();
     }
+
+    public static function getUniqueCovers(): array
+    {
+        return static::whereNotNull('cover')->pluck('cover')->unique()->toArray();
+    }
 }

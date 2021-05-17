@@ -15,9 +15,9 @@ class AudiobookSyncService
     public const SYNC_RESULT_BAD_FILE = 2;
     public const SYNC_RESULT_UNMODIFIED = 3;
 
-    private $fileRepository;
     private $utilService;
     private $getID3;
+    private $fileRepository;
 
 
     private $audiobook;
@@ -158,7 +158,7 @@ class AudiobookSyncService
     {
         $info = new SplFileInfo($filePath);
         $fileModifiedTime = $info->getMTime();
-        $file = $this->fileRepository->getOneById($this->utilService->getPathHash($filePath));
+        $file = $this->fileRepository->getOneByPath($filePath);
 
         // If file is not found, we assume it has changed since we cannot know if that's not the case
         // But currently that's an edge-case which shouldn't occur
