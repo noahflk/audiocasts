@@ -50,7 +50,13 @@ class UtilService
     public function isCoverFile(string $filename): bool
     {
         $coverFiletype = config('audiocasts.cover_file_type');
-        $filenameWithoutExtension = substr($filename, 0, strlen($coverFiletype));
-        return Str::isUuid($filenameWithoutExtension) && str_ends_with($filename, $filenameWithoutExtension);
+
+        if (!str_ends_with($filename, $coverFiletype)) {
+            return false;
+        }
+
+        $filenameWithoutExtension = substr($filename, 0, -strlen('.' . $coverFiletype));
+
+        return Str::isUuid($filenameWithoutExtension);
     }
 }

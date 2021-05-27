@@ -79,7 +79,7 @@ class CoverImageService
             $foundInDatabase = in_array($coverName, $this->coversFromDatabase);
 
             // We only delete files that could be actual cover files. Meaning they have a UUID filename and are JPGs
-            if (!$foundInDatabase && $this->utilSerivce->isCoverFile($coverPath)) {
+            if ($this->utilSerivce->isCoverFile($coverName) && !$foundInDatabase) {
                 Storage::disk('public')->delete($coverPath);
                 array_push($deletedCovers, $coverPath);
             }
