@@ -4,14 +4,20 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Services\SyncService;
+use Illuminate\Http\Response;
 
 class ScanLibraryFiles extends Controller
 {
+    public function __construct(
+        private SyncService $syncService
+    )
+    {
+    }
+
     public function __invoke(SyncService $audiobookFileService)
     {
-        return response()->json(
-            array_merge($audiobookFileService->scanAudiobookFiles(), [
-            "duration" => microtime(true) - LARAVEL_START
-        ]));
+        $this->syncService->scan();
+
+        return response()->json(null, Response::HTTP_NO_CONTENT);
     }
 }
