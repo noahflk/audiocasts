@@ -6,28 +6,24 @@ use App\Facades\Pathlib;
 use App\Models\CoverImage;
 use App\Models\Media;
 use App\Repositories\AudiobookRepository;
+use Illuminate\Http\File;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use getID3;
 
 class AudiobookAggregatorService
 {
-    private $getID3;
-    private $utilService;
-    private $audiobookRepository;
-
     // takes an audiobook
     // method to start a scan to get the metadata on the audiobook
     // return said metadata
 
     public function __construct(
-        getID3 $getID3,
-        UtilService $audiobookUtilService,
-        AudiobookRepository $audiobookRepository,
+        private getID3 $getID3,
+        private UtilService $utilService,
+        private AudiobookRepository $audiobookRepository,
+        private LocalDiskCoverImageService $localDiskCoverImageService,
     )
     {
-        $this->getID3 = $getID3;
-        $this->utilService = $audiobookUtilService;
-        $this->audiobookRepository = $audiobookRepository;
     }
 
     public function get(): array
@@ -73,7 +69,12 @@ class AudiobookAggregatorService
                 'updated_at' => date('Y-m-d H:i:s'),
             ];
 
-            if (isset($metadata['comments']['picture'][0]['data'])) {
+            $cover = $this->localDiskCoverImageService->getExistingCoverFileOnDiskIfAvailable($directory);
+
+            // Use cover from disk if available or if available use cover from file metadata
+            if ($cover) {
+                $data['cover'] = $cover;
+            } elseif (isset($metadata['comments']['picture'][0]['data'])) {
                 $data['cover'] = $this->getCoverPath($directory, $metadata);
             }
 
@@ -113,8 +114,7 @@ class AudiobookAggregatorService
         return true;
     }
 
-    // If the audiobook
-    private function getCoverPath($directory, $metadata)
+    private function getCoverPath($directory, $metadata): string
     {
         $audiobook = $this->audiobookRepository->getOneByPath($directory);
 
