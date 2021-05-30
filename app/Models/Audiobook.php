@@ -23,6 +23,11 @@ class Audiobook extends Model
         return 'images/cover-empty.jpg';
     }
 
+    public function path()
+    {
+        return "/audiobooks/{$this->slug}";
+    }
+
     public function files()
     {
         return $this->hasMany('App\Models\File');

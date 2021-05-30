@@ -14,6 +14,25 @@ class File extends Model
     protected $guarded = [];
     protected $keyType = 'string';
 
+    public function audiobook()
+    {
+        return $this->belongsTo("App\Models\Audiobook");
+    }
+
+    public function coverPath(): string
+    {
+        if ($this->cover) {
+            return config('audiocasts.cover_directory_private') . $this->cover;
+        }
+
+        if ($this->audiobook->cover) {
+            return config('audiocasts.cover_directory_private') . $this->audiobook->cover;
+
+        }
+
+        return 'images/cover-empty.jpg';
+    }
+
     public static function getAllCovers(): array
     {
         return static::whereNotNull('cover')->pluck('cover')->toArray();
