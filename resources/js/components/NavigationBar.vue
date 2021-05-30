@@ -7,7 +7,7 @@
                         <a href="/">
                             <img
                                 class="h-14"
-                                src="/images/audiocasts-logo-full.png"
+                                src="/images/audiocasts-logo-full.svg"
                                 alt="Audiocasts"
                             />
                         </a>
@@ -89,12 +89,12 @@
                 <a
                     href="#"
                     class="bg-theme-dark-blue text-theme-light-blue block px-3 py-2 rounded-md text-base font-medium"
-                    >Feed</a
+                >Feed</a
                 >
                 <a
                     href="#"
                     class="hover:bg-theme-light-blue block px-3 py-2 rounded-md text-base font-medium"
-                    >Scan Media</a
+                >Scan Media</a
                 >
             </div>
             <div class="pt-4 pb-3 border-t border-theme-dark-blue">
@@ -123,12 +123,12 @@
                     <a
                         href="#"
                         class="block px-3 py-2 rounded-md text-base font-medium hover:bg-theme-light-blue"
-                        >Settings</a
+                    >Settings</a
                     >
                     <a
                         href="#"
                         class="block px-3 py-2 rounded-md text-base font-medium hover:bg-theme-light-blue"
-                        >Sign out</a
+                    >Sign out</a
                     >
                 </div>
             </div>
