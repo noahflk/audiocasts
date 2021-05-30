@@ -4,10 +4,14 @@
             @foreach($audiobooks as $audiobook)
                 <div>
                     <div class="relative aspect-h-1 aspect-w-1 rounded overflow-hidden shadow">
-                        <img class="w-full h-full  absolute inset-0 object-cover" alt="Audiobook cover" src="{{ $audiobook->coverPath() }}">
+                        <img class="w-full h-full  absolute inset-0 object-cover" alt="Audiobook cover"
+                             src="{{ $audiobook->coverPath() }}">
                     </div>
                     <div class="text-theme-dark-blue mt-1 sm:mt-3">
-                        <a><div class="text-lg sm:text-xl font-bold truncate">{{ $audiobook->title }}</div></a>
+                        <a>
+                            <div class="text-lg sm:text-xl font-bold truncate"
+                                 title="{{ $audiobook->title }}">{{ $audiobook->title }}</div>
+                        </a>
                         <div class="text-lg sm:text-xl font-light truncate">{{ $audiobook->author }}</div>
                     </div>
                 </div>
