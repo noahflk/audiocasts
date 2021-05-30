@@ -88,7 +88,7 @@ class AudiobookAggregatorService
             }
 
             $data['title'] = $album;
-            $data['slug'] = $album;
+            $data['slug'] = Str::slug($album);
 
             if (isset($metadata['comments']['artist'][0])) {
                 $data['author'] = $metadata['comments']['artist'][0];
