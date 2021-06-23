@@ -74,7 +74,7 @@
         </div>
         <div class="col-span-6 lg:col-span-2">
             <div class="bg-white shadow overflow-hidden sm:rounded-lg p-6">
-                <div class="flex">
+                <div class="flex items-center">
                     <div class="flex-shrink-0 h-48 w-48">
                         <img class="h-full w-full shadow rounded-lg object-cover"
                              src="{{ $audiobook->coverPath() }}"

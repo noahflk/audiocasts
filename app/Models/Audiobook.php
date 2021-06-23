@@ -20,7 +20,7 @@ class Audiobook extends Model
             return '/' . config('audiocasts.cover_directory_private') . $this->cover;
         }
 
-        return 'images/cover-empty.jpg';
+        return '/images/cover-empty.jpg';
     }
 
     public function sizeInMB(): int
