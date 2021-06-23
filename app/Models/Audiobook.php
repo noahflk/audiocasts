@@ -17,10 +17,20 @@ class Audiobook extends Model
     public function coverPath(): string
     {
         if ($this->cover) {
-            return config('audiocasts.cover_directory_private') . $this->cover;
+            return '/' . config('audiocasts.cover_directory_private') . $this->cover;
         }
 
         return 'images/cover-empty.jpg';
+    }
+
+    public function sizeInMB(): int
+    {
+        return round($this->files()->sum('filesize') / 1000 / 1000);
+    }
+
+    public function formattedDuration(): string
+    {
+        return $this->getTime($this->files()->sum('playtime'));
     }
 
     public function path()
@@ -68,5 +78,11 @@ class Audiobook extends Model
     public static function getUniqueCovers(): array
     {
         return static::whereNotNull('cover')->pluck('cover')->unique()->toArray();
+    }
+
+    private function getTime($seconds)
+    {
+        $t = round($seconds);
+        return sprintf('%02d:%02d:%02d', ($t / 3600), ($t / 60 % 60), $t % 60);
     }
 }

@@ -19,6 +19,17 @@ class File extends Model
         return $this->belongsTo("App\Models\Audiobook");
     }
 
+    public function sizeInMB(): int
+    {
+        return round($this->filesize / 1000 / 1000);
+    }
+
+    public function formattedDuration(): string
+    {
+        $t = round($this->playtime);
+        return sprintf('%02d:%02d:%02d', ($t / 3600), ($t / 60 % 60), $t % 60);
+    }
+
     public function coverPath(): string
     {
         if ($this->cover) {

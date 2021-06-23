@@ -8,110 +8,93 @@
     <div class="grid grid-cols-6 gap-4">
         <div class="col-span-6 lg:col-span-4">
             <div class="flex flex-col">
-                <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
-                    <div
-                        class="align-middle inline-block w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200">
-                        <table class="w-full">
-                            <thead>
-                            <tr>
-                                <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                    <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+                        <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                <tr>
+                                    <th scope="col"
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
 
-                                </th>
-                                <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                                    Name
-                                </th>
-                                <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                                    Filesize
-                                </th>
-                                <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                                    Playtime
-                                </th>
-                                <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                                    Bitrate
-                                </th>
-                                <th class="px-6 py-3 border-b border-gray-200 bg-gray-50"></th>
-                            </tr>
-                            </thead>
-                            <tbody class="bg-white w-full">
-                            @forelse($audiobook->files as $key=>$file)
-                                <tr class="w-full">
-                                    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                                        <div class="text-sm leading-5 font-medium text-gray-900">
-                                            {{ $key + 1 }}
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                                        <div class="text-sm leading-5 font-medium text-gray-900">
-                                            {{ $file->name }}
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                                        <div
-                                            class="text-sm leading-5 text-gray-900">{{ round($file->filesize / 1000 / 1000, 1) }}
-                                            MB
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                                        <div
-                                            class="text-sm leading-5 text-gray-900">{{ sprintf('%02d:%02d:%02d', (round($file->playtime)/3600),(round($file->playtime)/60%60), round($file->playtime)%60) }}</div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">
-                                        <div class="text-sm leading-5 text-gray-900">{{ round($file->bitrate / 1000) }}
-                                            Kb/s
-                                        </div>
-                                    </td>
+                                    </th>
+                                    <th scope="col"
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Name
+                                    </th>
+                                    <th scope="col"
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        File
+                                    </th>
+                                    <th scope="col"
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Size
+                                    </th>
+                                    <th scope="col"
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Duration
+                                    </th>
                                 </tr>
-                            @empty
-                                <p>No files</p>
-                            @endforelse
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+
+                                @foreach($audiobook->files as $file)
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            {{ $loop->index + 1 }}
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="text-sm font-medium text-gray-900">
+                                                {{ $file->name }}
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span
+                                                class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                              {{ $file->type }}
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                            {{ $file->sizeInMB() }} MB
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                            {{ $file->formattedDuration() }}
+                                        </td>
+                                    </tr>
+                                @endforeach
+
+                                <!-- More people... -->
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
-
             </div>
 
         </div>
         <div class="col-span-6 lg:col-span-2">
-            <div class="bg-white shadow overflow-hidden sm:rounded-lg">
-                <div class="px-4 py-5 border-b border-gray-200 sm:px-6">
-                    <h3 class="text-lg leading-6 font-medium text-gray-900">
-                        Audiobook Information
-                    </h3>
-                </div>
-                <div>
-                    <div>
-                        <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                            <dt class="text-sm leading-5 font-medium text-gray-500">
-                                Title
-                            </dt>
-                            <dd class="mt-1 text-sm leading-5 text-gray-900 sm:mt-0 sm:col-span-2">
-                                {{ $audiobook->title }}
-                            </dd>
+            <div class="bg-white shadow overflow-hidden sm:rounded-lg p-6">
+                <div class="flex">
+                    <div class="flex-shrink-0 h-48 w-48">
+                        <img class="h-full w-full shadow rounded-lg object-cover"
+                             src="{{ $audiobook->coverPath() }}"
+                             alt="Cover of {{ $audiobook->title  }}">
+                    </div>
+                    <div class="ml-6 space-y-2">
+                        <div class="text-lg font-bold text-gray-900">
+                            {{ $audiobook->title  }}
                         </div>
-                        <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                            <dt class="text-sm leading-5 font-medium text-gray-500">
-                                Author
-                            </dt>
-                            <dd class="mt-1 text-sm leading-5 text-gray-900 sm:mt-0 sm:col-span-2">
-                                {{ $audiobook->author }}
-                            </dd>
+                        <div class="text-lg font text-gray-500">
+                            {{ $audiobook->author  }}
                         </div>
-                        <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                            <dt class="text-sm leading-5 font-medium text-gray-500">
-                                Runtime
-                            </dt>
-                            <dd class="mt-1 text-sm leading-5 text-gray-900 sm:mt-0 sm:col-span-2">
-                                {{ $duration }}
-                            </dd>
+                        <div class="text text-gray-500">
+                            Lenth: {{ $audiobook->formattedDuration()  }}
                         </div>
-                        <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                            <dt class="text-sm leading-5 font-medium text-gray-500">
-                                Files and size
-                            </dt>
-                            <dd class="mt-1 text-sm leading-5 text-gray-900 sm:mt-0 sm:col-span-2">
-                                {{ $count }} files, {{ $size }} MB
-                            </dd>
+                        <div class="text text-gray-500">
+                            {{ $audiobook->files()->count() }} files
+                        </div>
+                        <div class="text text-gray-500">
+                            Total size of {{ $audiobook->sizeInMB() }} MB
                         </div>
                     </div>
                 </div>
