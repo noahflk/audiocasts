@@ -6,7 +6,7 @@
     </div>
 
     <div class="grid grid-cols-6 gap-4">
-        <div class="col-span-6 lg:col-span-4">
+        <div class="col-span-6 lg:col-span-4 order-last lg:order-first">
             <div class="flex flex-col">
                 <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                     <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
@@ -76,7 +76,7 @@
             </div>
 
         </div>
-        <div class="col-span-6 lg:col-span-2">
+        <div class="col-span-6 lg:col-span-2 lg:ml-6">
             <div class="bg-white shadow overflow-hidden sm:rounded-lg p-6">
                 <div class="flex items-center">
                     <div class="flex-shrink-0 h-48 w-48">
