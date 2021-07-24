@@ -41,6 +41,7 @@ class InitCommand extends Command
         }
 
         try {
+            $this->maybeSymlinkStorage();
             $this->maybeSetUpDatabase();
             $this->migrateDatabase();
             $this->maybeGenerateAppKey();
@@ -50,6 +51,12 @@ class InitCommand extends Command
         }
 
         $this->comment(PHP_EOL . 'Success! Audiocasts is now ready ✅');
+    }
+
+    private function maybeSymlinkStorage(): void
+    {
+        $this->info('Trying to create symlink for publicly accessible storage');
+        $this->artisan->call('storage:link');
     }
 
     private function maybeGenerateAppKey(): void
