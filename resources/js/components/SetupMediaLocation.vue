@@ -36,7 +36,7 @@
                         'border-red-500 border-2': errorMessage,
                         'border-theme-light-blue': !errorMessage,
                     }"
-                    placeholder="Add absolute path..."
+                    placeholder="Add absolute path from server..."
                     class="bg-theme-light-blue focus:ring-indigo-500 focus:border-theme-blue block w-full pl-3 pr-12 rounded-md"
                 />
                 <div class="absolute inset-y-0 right-0 flex items-center">

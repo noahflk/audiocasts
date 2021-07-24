@@ -20,14 +20,6 @@ use App\Http\Controllers\AudiobookController;
 */
 
 Route::middleware([EnsureSetupIsComplete::class, 'auth.web'])->group(function () {
-    Route::get('/settings/1', function () {
-        return view('settings-1');
-    });
-
-    Route::get('/settings/2', function () {
-        return view('settings-2');
-    });
-
     Route::get('/', [DashboardController::class, 'index']);
     Route::get('/dashboard', [DashboardController::class, 'index']);
     Route::get('/audiobooks', [DashboardController::class, 'index']);

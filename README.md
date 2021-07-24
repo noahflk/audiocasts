@@ -21,8 +21,7 @@ yarn install
 yarn run dev
 ```
 
-This command configured the application and the database. **Important:** don't forget to configure the `.env` file
-before running this command.
+This command configured the application and the database.
 
 ```shell
 php artisan audiocasts:init

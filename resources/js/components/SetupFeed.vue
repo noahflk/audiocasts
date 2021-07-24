@@ -9,6 +9,7 @@
                 aria-label="Title"
                 id="title"
                 name="title"
+                placeholder="Dan's audiobooks"
                 required
                 class="appearance-none text-theme-dark-blue border-transparent rounded-md relative block w-full px-3 py-2 bg-theme-light-blue text-gray-900 rounded-md focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
             />
@@ -41,13 +42,14 @@
 
         <div>
             <label for="author"
-                >Author <span class="text-red-600">*</span></label
+                >Feed Author <span class="text-red-600">*</span></label
             >
             <input
                 v-model="author.value"
-                aria-label="Author"
+                aria-label="Feed Author"
                 id="author"
                 name="author"
+                placeholder="Dan Smith"
                 required
                 class="appearance-none text-theme-dark-blue border-transparent rounded-md relative block w-full px-3 py-2 bg-theme-light-blue text-gray-900 rounded-md focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
             />
@@ -121,6 +123,7 @@
                     aria-label="Language"
                     id="language"
                     name="language"
+                    placeholder="en-us"
                     required
                     class="appearance-none text-theme-dark-blue border-transparent rounded-md relative block w-full px-3 py-2 bg-theme-light-blue text-gray-900 rounded-md focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
                 />
