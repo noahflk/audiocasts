@@ -7,6 +7,7 @@ use App\Http\Middleware\EnsureSetupIsIncomplete;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FeedController;
 use App\Http\Controllers\AudiobookController;
+use App\Http\Controllers\FileDownloadController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,9 +25,10 @@ Route::middleware([EnsureSetupIsComplete::class, 'auth.web'])->group(function ()
     Route::get('/dashboard', [DashboardController::class, 'index']);
     Route::get('/audiobooks', [DashboardController::class, 'index']);
     Route::get('/audiobooks/{audiobook:slug}', [AudiobookController::class, 'show']);
+    Route::get('/audiobooks/{audiobook:slug}/media/{file:id}', FileDownloadController::class);
 });
 
-Route::get('/feed', FeedController::class)->middleware('auth.basic');
+Route::get('/feed', FeedController::class)->middleware('auth.feed');
 
 // TODO: Setup must be incomplete
 Route::get('/setup', function () {
